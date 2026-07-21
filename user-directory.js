@@ -43,4 +43,50 @@ function displayUsers(users) {
     `).join("");
 }
 
-loadUsers();
+let allUsers = [];
+
+async function init() {
+    allUsers = await fetch("https://jsonplaceholder.typicode.com/users").then(r => r.json());
+    displayUsers(allUsers);
+
+    const searchInput = document.getElementById("search");
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allUsers.filter(user =>
+                user.name.toLowerCase().includes(query) ||
+                user.email.toLowerCase().includes(query)
+            );
+            displayUsers(filtered);
+        });
+    }
+
+    // Sort A-Z / Z-A
+    const sortBtn = document.getElementById("sort-btn");
+    let sortAscending = true;
+    if (sortBtn) {
+        sortBtn.addEventListener("click", () => {
+            const sorted = [...allUsers].sort((a, b) =>
+                sortAscending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+            );
+            sortAscending = !sortAscending;
+            displayUsers(sorted);
+        });
+    }
+
+    // Filter by city
+    const citySelect = document.getElementById("city-filter");
+    if (citySelect) {
+        const cities = [...new Set(allUsers.map(u => u.address.city))];
+        citySelect.innerHTML = `<option value="">All Cities</option>` +
+            cities.map(city => `<option value="${city}">${city}</option>`).join("");
+
+        citySelect.addEventListener("change", (e) => {
+            const city = e.target.value;
+            const filtered = city ? allUsers.filter(u => u.address.city === city) : allUsers;
+            displayUsers(filtered);
+        });
+    }
+}
+
+init();
