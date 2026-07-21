@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>User Directory</title>
+    
     <style>
         .hidden { display: none; }
         .user-card {
@@ -20,6 +21,15 @@
         <div id="loading">Loading...</div>
         <div id="error" class="hidden"></div>
         <div id="users-container"></div>
+    </div>
+   <div id="post-form-section">
+    <h2>Create a Post</h2>
+    <form id="post-form">
+        <input type="text" id="post-title" placeholder="Title" required>
+        <textarea id="post-body" placeholder="Body" required></textarea>
+        <button type="submit">Submit Post</button>
+       </form>
+      <div id="post-result"></div>
     </div>
     <script src="user-directory.js"></script>
 </body>
