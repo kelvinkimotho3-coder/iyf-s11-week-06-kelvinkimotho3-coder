@@ -84,3 +84,52 @@ function getPostComments(postId) {
         }, 1000);
     });
 }
+
+// Exercise 1: Chain Promises
+getUserData(1)
+    .then(user => {
+        console.log("Chained - User:", user);
+        return getUserPosts(user.id);
+    })
+    .then(posts => {
+        console.log("Chained - Posts:", posts);
+        return getPostComments(posts[0].id);
+    })
+    .then(comments => {
+        console.log("Chained - Comments:", comments);
+    })
+    .catch(error => {
+        console.error("Chained - Error:", error);
+    });
+
+// Exercise 2: Promise.all
+const promise1 = getUserData(1);
+const promise2 = getUserData(2);
+const promise3 = getUserData(3);
+
+Promise.all([promise1, promise2, promise3])
+    .then(results => {
+        console.log("All users (Promise.all):", results);
+    })
+    .catch(error => {
+        console.error("One failed:", error);
+    });
+
+// Exercise 3: Promise.race
+const fast = new Promise(resolve => setTimeout(() => resolve("Fast!"), 100));
+const slow = new Promise(resolve => setTimeout(() => resolve("Slow!"), 500));
+
+Promise.race([fast, slow])
+    .then(result => {
+        console.log("Winner (Promise.race):", result);
+    });
+
+// Build: Fetch data for 3 users simultaneously, display all at once
+function loadThreeUsers() {
+    Promise.all([getUserData(1), getUserData(2), getUserData(3)])
+        .then(users => {
+            console.log("All 3 users loaded simultaneously:", users);
+        })
+        .catch(error => console.error("Error loading users:", error));
+}
+loadThreeUsers();
