@@ -1,0 +1,6 @@
+node_modules/
+.devin/
+.vscode/
+.codeium/
+.copilot/
+.cline/
